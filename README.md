@@ -26,7 +26,7 @@ These tests only need the Nextcloud code and PHP.
     name: Unit tests
     steps:
       - name: Set up Nextcloud env
-        uses: ChristophWurst/setup-nextcloud@v0.3.1
+        uses: nextcloud/setup-server-action@v0.3.1
         with:
           nextcloud-version: stable25
           php-version: '8.2'
@@ -51,7 +51,7 @@ These tests need an *installed* Nextcloud and PHP.
     name: Unit tests
     steps:
       - name: Set up Nextcloud env
-        uses: ChristophWurst/setup-nextcloud@v0.3.1
+        uses: nextcloud/setup-server-action@v0.3.1
         with:
           nextcloud-version: stable25
           php-version: '8.1'
@@ -78,7 +78,7 @@ These tests need an *installed* Nextcloud and PHP.
     name: Unit tests
     steps:
       - name: Set up Nextcloud env
-        uses: ChristophWurst/setup-nextcloud@v0.3.1
+        uses: nextcloud/setup-server-action@v0.3.1
         with:
           nextcloud-version: stable25
           php-version: '8.1'
