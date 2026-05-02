@@ -51,7 +51,7 @@ jobs:
         with:
           nextcloud-version: stable33
           install: true
-          php-versoin: '8.5'
+          php-version: '8.5'
       - name: Test occ
         run: php -f nextcloud/occ config:list
       - name: Test php
