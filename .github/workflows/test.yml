@@ -53,6 +53,8 @@ jobs:
           install: true
       - name: Test occ
         run: php -f nextcloud/occ config:list
+      - name: Test php
+        run: php -i
   test-krankerl:
     runs-on: ubuntu-latest
     name: Test krankerl
@@ -83,6 +85,8 @@ jobs:
           patch-php-version-check: true
       - name: Test PHP
         run: php --version
+      - name: Test php
+        run: php -i
 
   test-mysql:
     runs-on: ubuntu-latest

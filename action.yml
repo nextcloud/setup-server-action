@@ -74,21 +74,6 @@ runs:
       shell: bash
       run: npm i -g npm@"${{ inputs.npm-version }}"
 
-    - name: Setup PHP extension cache environment
-      id: php-extensions-cache
-      uses: shivammathur/cache-extensions@793aad6c07ef210afdc8a4b043db331546f1854f # v1.14.4
-      with:
-        php-version: ${{ inputs.php-version }}
-        extensions: ${{ steps.globals.outputs.PHP_EXTENSIONS }}
-        key: ${{ steps.globals.outputs.PHP_EXTENSIONS_CACHE_KEY }}
-
-    - name: Cache PHP extensions
-      uses: actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5.0.5
-      with:
-        path: ${{ steps.php-extensions-cache.outputs.dir }}
-        key: ${{ steps.php-extensions-cache.outputs.key }}
-        restore-keys: ${{ steps.php-extensions-cache.outputs.key }}
-
     - name: Set up PHP ${{ inputs.php-version }}
       if: ${{ inputs.php-version != 'false' }}
       uses: shivammathur/setup-php@accd6127cb78bee3e8082180cb391013d204ef9f # v2.37.0
