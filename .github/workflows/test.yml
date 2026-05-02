@@ -31,7 +31,7 @@ jobs:
           nextcloud-version: stable33
           node-version: 24
           npm-version: 11
-          php-version: '8.5'
+          php-version: '8.6'
       - name: Test node env
         run: |
           node --version
@@ -51,7 +51,7 @@ jobs:
         with:
           nextcloud-version: stable33
           install: true
-          php-version: '8.5'
+          php-version: '8.6'
       - name: Test occ
         run: php -f nextcloud/occ config:list
       - name: Test php
