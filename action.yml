@@ -52,7 +52,7 @@ runs:
       id: globals
       shell: bash
       run: |
-        echo "PHP_EXTENSIONS=apcu, ctype, dom, exif, fileinfo, ftp, gd, gmp, imap, imagick, json, ldap, sodium, posix, mbstring, igbinary curl, pcntl, phar, smbclient, zlib, xml, openssl, pdo_mysql, pdo_pgsql, pdo_sqlite, posix, redis" >> "${GITHUB_OUTPUT}"
+        echo "PHP_EXTENSIONS=apcu, ctype, dom, exif, fileinfo, ftp, gd, gmp, imap, imagick, json, ldap, sodium, posix, mbstring, igbinary, curl, pcntl, phar, smbclient, zlib, xml, openssl, pdo_mysql, pdo_pgsql, pdo_sqlite, posix, redis" >> "${GITHUB_OUTPUT}"
         echo "PHP_EXTENSIONS_CACHE_KEY=php-ext-cache" >> "${GITHUB_OUTPUT}"
 
     - name: Checkout Nextcloud
