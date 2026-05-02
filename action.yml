@@ -56,7 +56,7 @@ runs:
       id: globals
       shell: bash
       run: |
-        echo "PHP_EXTENSIONS=apcu, ctype, dom, fileinfo, ftp, gd, imagick, json, ldap, openssl, pdo_mysql, pdo_pgsql, pdo_sqlite, posix" >> "${GITHUB_OUTPUT}"
+        echo "PHP_EXTENSIONS=apcu, ctype, dom, fileinfo, ftp, gd, imagick, json, ldap, openssl, pdo_mysql, pdo_pgsql, pdo_sqlite, posix, redis" >> "${GITHUB_OUTPUT}"
         echo "PHP_EXTENSIONS_CACHE_KEY=php-ext-cache" >> "${GITHUB_OUTPUT}"
 
     - name: Checkout Nextcloud
