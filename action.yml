@@ -45,41 +45,73 @@ inputs:
     required: false
     default: ''
 
+env:
+  php-extensions: apcu, ctype, dom, fileinfo, ftp, gd, imagick, json, ldap, openssl, pdo_mysql, pdo_pgsql, pdo_sqlite, posix
+  php-extensions-cache-key: php-ext-cache
+
 runs:
   using: "composite"
   steps:
+    - name: Set global variables
+      id: globals
+      shell: bash
+      run: |
+        echo "PHP_EXTENSIONS=apcu, ctype, dom, fileinfo, ftp, gd, imagick, json, ldap, openssl, pdo_mysql, pdo_pgsql, pdo_sqlite, posix" >> "${GITHUB_OUTPUT}"
+        echo "PHP_EXTENSIONS_CACHE_KEY=php-ext-cache" >> "${GITHUB_OUTPUT}"
+
     - name: Checkout Nextcloud
       shell: bash
       run: git clone https://github.com/nextcloud/server.git --recursive --depth 1 -b ${{ inputs.nextcloud-version }} nextcloud
+
     - name: Set up Node.js ${{ inputs.node-version }}
       if: ${{ inputs.node-version != 'false' }}
       uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6.4.0
       with:
         node-version: ${{ inputs.node-version }}
+
     - name: Set up npm ${{ inputs.npm-version }}
       if: ${{ inputs.npm-version != 'default' }}
       shell: bash
       run: npm i -g npm@"${{ inputs.npm-version }}"
-    - name: Set up php${{ inputs.php-version }}
+
+    - name: Setup PHP extension cache environment
+      id: php-extensions-cache
+      uses: shivammathur/cache-extensions@793aad6c07ef210afdc8a4b043db331546f1854f # v1.14.4
+      with:
+        php-version: ${{ inputs.php-version }}
+        extensions: ${{ steps.globals.outputs.PHP_EXTENSIONS }}
+        key: ${{ steps.globals.outputs.PHP_EXTENSIONS_CACHE_KEY }}
+
+    - name: Cache PHP extensions
+      uses: actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5.0.5
+      with:
+        path: ${{ steps.php-extensions-cache.outputs.dir }}
+        key: ${{ steps.php-extensions-cache.outputs.key }}
+        restore-keys: ${{ steps.php-extensions-cache.outputs.key }}
+
+    - name: Set up PHP ${{ inputs.php-version }}
       if: ${{ inputs.php-version != 'false' }}
       uses: shivammathur/setup-php@accd6127cb78bee3e8082180cb391013d204ef9f # v2.37.0
       with:
         php-version: ${{ inputs.php-version }}
-        extensions: ctype,curl,dom,gd,iconv,intl,json,mbstring,openssl,posix,sqlite,xml,zip,gmp,redis
+        extensions: ${{ steps.globals.outputs.PHP_EXTENSIONS }}
         coverage: ${{ inputs.php-coverage }}
         ini-file: development
         Ini-Values:
           disable_functions= # https://github.com/shivammathur/setup-php/discussions/573
+
     - name: Install krankerl
       if: ${{ contains(inputs.tools, 'krankerl') }}
       shell: bash
       run: |
         wget https://github.com/ChristophWurst/krankerl/releases/download/v0.14.0/krankerl_0.14.0_amd64.deb
         sudo dpkg -i krankerl_0.14.0_amd64.deb
+
     - name: Patch out Nextcloud's version check
       shell: bash
       if: ${{ inputs.patch-php-version-check == 'true' }}
       run: echo "<?php" > nextcloud/lib/versioncheck.php
+
     - name: Install Nextcloud
       if: ${{ inputs.install == 'true' }}
       shell: bash
