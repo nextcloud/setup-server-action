@@ -48,7 +48,7 @@ runs:
       run: git clone https://github.com/nextcloud/server.git --recursive --depth 1 -b ${{ inputs.nextcloud-version }} nextcloud
     - name: Set up Node.js ${{ inputs.node-version }}
       if: ${{ inputs.node-version != 'false' }}
-      uses: actions/setup-node@6044e13b5dc448c55e2357c09f80417699197238 # v6
+      uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6.4.0
       with:
         node-version: ${{ inputs.node-version }}
     - name: Set up npm ${{ inputs.npm-version }}
@@ -57,20 +57,23 @@ runs:
       run: npm i -g npm@"${{ inputs.npm-version }}"
     - name: Set up php${{ inputs.php-version }}
       if: ${{ inputs.php-version != 'false' }}
-      uses: shivammathur/setup-php@44454db4f0199b8b9685a5d763dc37cbf79108e1 # v2
+      uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # v2.37.2
       with:
         php-version: ${{ inputs.php-version }}
         extensions: ctype,curl,dom,gd,iconv,intl,json,mbstring,openssl,posix,sqlite,xml,zip,gmp,redis
         coverage: ${{ inputs.php-coverage }}
         ini-file: development
         ini-values:
-          disable_functions= # https://github.com/shivammathur/setup-php/discussions/573
+          # For more information: https://github.com/shivammathur/setup-php/discussions/573
+          # Probably not necessary anymore when setup-php uses the Sury PPA:
+          # https://github.com/shivammathur/setup-php/issues/1083
+          disable_functions=""
     - name: Install krankerl
       if: ${{ contains(inputs.tools, 'krankerl') }}
       shell: bash
       run: |
-        wget https://github.com/ChristophWurst/krankerl/releases/download/v0.13.0/krankerl_0.13.0_amd64.deb
-        sudo dpkg -i krankerl_0.13.0_amd64.deb
+        wget https://github.com/ChristophWurst/krankerl/releases/download/v0.14.0/krankerl_0.14.0_amd64.deb
+        sudo dpkg -i krankerl_0.14.0_amd64.deb
     - name: Patch out Nextcloud's version check
       shell: bash
       if: ${{ inputs.patch-php-version-check == 'true' }}
