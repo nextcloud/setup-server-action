@@ -44,8 +44,12 @@ runs:
   using: "composite"
   steps:
     - name: Checkout Nextcloud
-      shell: bash
-      run: git clone https://github.com/nextcloud/server.git --recursive --depth 1 -b ${{ inputs.nextcloud-version }} nextcloud
+      uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+      with:
+        repository: nextcloud/server
+        ref: ${{ inputs.nextcloud-version }}
+        path: nextcloud
+        submodules: true
     - name: Set up Node.js ${{ inputs.node-version }}
       if: ${{ inputs.node-version != 'false' }}
       uses: actions/setup-node@6044e13b5dc448c55e2357c09f80417699197238 # v6
